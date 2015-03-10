@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+	<!-- the Rules Set -->
+	<bean id="SLOADRuleSet" class="com.wellsfargo.lbs.defaultloandecisioning.rules.validation.SLOADRuleSet" />
+		
+	<!-- the Rules Fact -->
+	<bean id="SLOADRuleFact" class="com.wellsfargo.lbs.defaultloandecisioning.rules.validation.InputValidationRule" />
+	
+	
+	<!-- RULESETS -->
+	
+	<!-- VALIDATION Rules -->
+	<bean id="SLOADValidationRules" class="com.wellsfargo.lbs.defaultloandecisioning.rules.validation.RuleSetFactory">
+		<property name="ruleKey" value="REP-5_Validation_Rules_XPath" />
+		<!-- <property name="ruleChangeset" value="C://dev//workspace//rulecontainer//rulescontainer//src//main//resources//REP-5_Validation_Rules_XPath_changeset.xml"/> -->
+		<property name="ruleChangeset" value="REP-5_Validation_Rules_XPath_changeset.xml"/>
+		<property name="ruleSet" ref="SLOADRuleSet" />
+		<property name="ruleFact" ref="SLOADRuleFact" />
+	</bean>
+	
+	<!-- Rule Engine -->
+	<bean id="SLOADValidationRuleEngine"
+		class="com.wellsfargo.lbs.defaultloandecisioning.rules.validation.SLOADRuleEngine">
+		<property name="ruleSets">
+			<list>
+				<ref bean="SLOADValidationRules"/>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Rules Updater -->
+	<bean id="SLOADRuleStarter" class="com.wellsfargo.lbs.defaultloandecisioning.rules.validation.SLOADRuleStarter" 
+		init-method="startKnowledgeAgent">
+		<!-- interval to scan for rule changes (in seconds)-->
+		<property name="scanInterval" value="300"/>
+		<property name="ruleSets">
+			<list>
+				<ref bean="SLOADValidationRules"/>
+			</list>
+		</property>
+		
+	</bean>
+		
+</beans>

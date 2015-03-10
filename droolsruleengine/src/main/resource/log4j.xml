@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!-- Appenders -->
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p: %c - %m%n" />
+		</layout>
+	</appender>
+	
+	 <appender name="RulesLog" class="org.apache.log4j.RollingFileAppender">
+	  <param name="MaxFileSize" value="5MB"/>
+      <param name="MaxBackupIndex" value="10"/>
+        <param name="File" value="C:\\SLOADRulesContainer\\rulescontainer\\logs\\RuleContainer.log" />
+        <param name="Threshold" value="INFO" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%X{messageId}][%d %5p %20t](%c{1}) - [%M] - %m%n"/>
+        </layout>
+    </appender> 
+	
+	 <appender name="RulesTestProgramLog" class="org.apache.log4j.RollingFileAppender">
+	  <param name="MaxFileSize" value="5MB"/>
+      <param name="MaxBackupIndex" value="10"/>
+        <param name="File" value="C:\\SLOADRulesContainer\\rulescontainer\\logs\\RuleTester.log" />
+        <param name="Threshold" value="INFO" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%X{messageId}][%d %5p %20t](%c{1}) - [%M] - %m%n"/>
+        </layout>
+    </appender> 
+
+	
+	<!-- Application Loggers -->
+
+	<logger name="com.wellsfargo.lbs.defaultloandecisioning.rules.client" additivity="false">
+		<level value="info" />
+		<appender-ref ref="RulesTestProgramLog" />
+	</logger>
+	
+	<logger name="com.wellsfargo.lbs.defaultloandecisioning.rules.container" additivity="false">
+		<level value="info" />
+		<appender-ref ref="RulesLog" />
+	</logger>
+
+	<!-- Root Logger -->
+	<root>
+		<priority value="info" />
+		<appender-ref ref="RulesLog" />
+	</root>
+	
+</log4j:configuration>
